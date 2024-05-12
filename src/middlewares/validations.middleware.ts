@@ -21,6 +21,12 @@ export default class Validations {
     req.body.user = user;
     return next();
   }
+  public async existingUser(req: Request, res: Response, next: NextFunction) {
+    const user = await UserModel.findOne({ email: req.body.email });
+    if (user) return res.status(409).send("User already exists");
+
+    return next();
+  }
   public async generateToken(req: Request, res: Response, next: NextFunction) {
     const token = jsonwebtoken.sign(req.body, defaultConfig.secret, {
       expiresIn: 60 * 60,
@@ -44,4 +50,18 @@ export default class Validations {
       return next();
     });
   }
+/*   public async validateAdmin (req: Request, res: Response, next: NextFunction) {
+    const token = req.headers.authorization;
+    if (!token) return res.status(401).send("Token not provided");
+
+    jsonwebtoken.verify(token, defaultConfig.secret, (error, decoded: any) => {
+      if (error) return res.status(401).send("Invalid token");
+
+      if (decoded.role !== "admin") return res.status(403).send("User is not an admin");
+
+      req.body.token = decoded;
+      //req.cookies.user_token = decoded;
+      return next();
+    });
+  } */
 }

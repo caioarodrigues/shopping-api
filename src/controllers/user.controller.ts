@@ -15,7 +15,8 @@ export class UserController {
   public async createUser(req: Request, res: Response) {
     try {
       const user = await UserModel.create(req.body);
-      return res.status(201).send(user);
+      const { email, name, createdAt } = user;
+      return res.status(201).send({ email, name, createdAt });
     } catch (error) {
       return res.status(500);
     }
