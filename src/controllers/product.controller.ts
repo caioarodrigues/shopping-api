@@ -56,4 +56,20 @@ export default class ProductController {
       return res.status(500);
     }
   }
+  public async buyProduct(req: Request, res: Response) {
+    try {
+      const product = await ProductModel.findById(req.body.product_id);
+      if (!product) return res.status(404).send("Product not found");
+
+      if (product.amount < req.body.amount)
+        return res.status(400).send("Not enough stock");
+
+      product.amount -= req.body.amount;
+      await product.save();
+
+      return res.json(product);
+    } catch (error) {
+      return res.status(500);
+    }
+  }
 }

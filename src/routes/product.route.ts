@@ -13,6 +13,11 @@ productRouter.post(
   validations.validateAdmin,
   productController.addProduct
 );
+productRouter.post(
+  "/product/buy",
+  validations.validateToken,
+  productController.buyProduct
+);
 productRouter.put(
   "/product/edit",
   validations.validateAdmin,
