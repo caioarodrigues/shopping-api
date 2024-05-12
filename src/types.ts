@@ -1,0 +1,1 @@
+export type ProductType = "drinkable" | "eatable" | "wearable";
