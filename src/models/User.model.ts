@@ -23,10 +23,21 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  itemsBought: {
-    type: [ProductModel.schema],
-    default: [],
-  },
+  itemsBought: [
+    {
+      type: {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: ProductModel,
+        },
+        amount: {
+          type: Number,
+          required: true,
+        },
+      },
+      default: null,
+    },
+  ],
 });
 
 export default mongoose.model("User", UserSchema);
