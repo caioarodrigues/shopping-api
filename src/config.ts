@@ -5,6 +5,7 @@ dotenv.config();
 
 export const defaultConfig = {
   port: process.env.PORT || 3000,
+  secret: process.env.SECRET || "secret",
   db: {
     host: process.env.DB_HOST || "localhost",
     connection_string: process.env.CONNECTION_STRING || "",
