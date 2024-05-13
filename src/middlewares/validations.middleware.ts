@@ -44,7 +44,7 @@ export default class Validations {
     jsonwebtoken.verify(token, defaultConfig.secret, (error, decoded) => {
       if (error) return res.status(401).send("Invalid token");
 
-      console.log(token, decoded)
+      //console.log(token, decoded)
       req.body.token = decoded;
       //req.cookies.user_token = decoded;
       return next();
