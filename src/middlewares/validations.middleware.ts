@@ -32,7 +32,6 @@ export default class Validations {
       expiresIn: 60 * 60,
     });
 
-    console.log(token)
     req.body.token = token;
     //req.cookies.user_token = token;
     return res.status(200).send({ token });
@@ -49,6 +48,22 @@ export default class Validations {
       //req.cookies.user_token = decoded;
       return next();
     });
+  }
+  public async verifyEmptyData (req: Request, res: Response, next: NextFunction) {
+    const { token, iat, exp, ...params } = req.body;
+    const keys = Object.keys(params).length;
+    
+    if (!keys) {
+      return res.status(400).json({ message: "No data provided" });
+    }
+
+    return next();
+  }
+  public async verifySameUser (req: Request, res: Response, next: NextFunction) {
+    if (req.body.token.user._id !== req.params.userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+    return next();
   }
   public async validateAdmin (req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization;

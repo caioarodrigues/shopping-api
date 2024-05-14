@@ -8,7 +8,7 @@
 
 [] order history by each user
 
-[] user CRUD
+[x] user CRUD
   [x] add 
-  [] delete
-  [] update
+  [x] delete
+  [x] update
