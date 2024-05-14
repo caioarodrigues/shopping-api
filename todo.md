@@ -12,3 +12,6 @@
   [x] add 
   [x] delete
   [x] update
+
+[x] admin stuff
+  [x] list all users 

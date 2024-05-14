@@ -6,6 +6,12 @@ const userRouter = Router();
 const userController = UserController.getInstance();
 const validations = Validations.getInstance();
 
+userRouter.get(
+  "/user",
+  validations.validateToken,
+  validations.validateAdmin,
+  userController.listAllUsers
+);
 userRouter.post(
   "/user/create",
   validations.existingUser,
