@@ -9,9 +9,36 @@ const validations = Validations.getInstance();
 orderRoute.use(validations.validateToken);
 
 orderRoute.post("/order/create", orderController.createOrder);
-orderRoute.get("/order/:userId", orderController.getOrders);
-orderRoute.get("/order/:orderId", orderController.getOrder);
-orderRoute.put("/order/:userId/:orderId", orderController.updateOrder);
-orderRoute.put("/order/:userId/:orderId/cancel", orderController.cancelOrder);
+orderRoute.get(
+  "/order/:order-id",
+  validations.verifySameUser,
+  orderController.getOrder
+);
+orderRoute.get(
+  "/order/list",
+  validations.validateAdmin,
+  orderController.getOrders
+);
+orderRoute.get(
+  "/order/list/:userId",
+  validations.verifySameUser,
+  orderController.getOrders
+);
+orderRoute.get(
+  "/order/admin/list/:order-id",
+  validations.validateAdmin,
+  orderController.getOrder
+);
+orderRoute.get(
+  "/order/admin/list/user/:userId",
+  validations.validateAdmin,
+  orderController.getOrders
+);
+orderRoute.put(
+  "/order/admin/:orderId",
+  validations.validateAdmin,
+  orderController.updateOrder
+);
+orderRoute.put("/order/:orderId/cancel", orderController.cancelOrder);
 
 export default orderRoute;

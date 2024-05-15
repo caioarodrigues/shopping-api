@@ -14,8 +14,9 @@ export default class OrderController {
 
   public async createOrder(req: Request, res: Response) {
     try {
-      console.log(req.body.order);
-      const order = await OrderModel.create(req.body.order);
+      const { userId, products } = req.body.order;
+      //console.log(req.body.order);
+      const order = await OrderModel.create({ userId, products });
       return res.status(201).send(order);
     } catch (error) {
       return res.status(500);
