@@ -58,16 +58,34 @@ export default class ProductController {
   }
   public async buyProduct(req: Request, res: Response) {
     try {
-      const product = await ProductModel.findById(req.body.product_id);
-      if (!product) return res.status(404).send("Product not found");
+      const idProducts = req.body.order.products;
 
-      if (product.amount < req.body.amount)
-        return res.status(400).send("Not enough stock");
+      console.log(idProducts)
+      const products = await Promise.all(
+        idProducts.map(
+          async (
+            product: { productId: string; quantity: number },
+            index: number
+          ) => {
+            const thisProduct = await ProductModel.findById(product.productId);
+            if (!thisProduct) return res.status(404).send("Product not found");
 
-      product.amount -= req.body.amount;
-      await product.save();
+            if (idProducts[index].quantity > thisProduct.amount)
+              return res.status(400).send("Not enough stock");
 
-      return res.json(product);
+            thisProduct.amount -= idProducts[index].quantity;
+            await thisProduct.save();
+
+            return {
+              name: thisProduct.name,
+              productId: product.productId,
+              quantity: product.quantity,
+            };
+          }
+        )
+      );
+
+      return res.json(products);
     } catch (error) {
       return res.status(500);
     }

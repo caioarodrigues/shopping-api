@@ -1,32 +1,35 @@
 import ProductController from "../controllers/product.controller";
 import Validations from "../middlewares/validations.middleware";
+import ProductValidations from "../middlewares/productValidations.middleware";
 import { Router } from "express";
 
-const productRouter = Router();
+const productRoutes = Router();
 const validations = Validations.getInstance();
 const productController = ProductController.getInstance();
+const productValidations = ProductValidations.getInstance();
 
-productRouter.get("/products", productController.listAllProducts);
-productRouter.get("/products/:type", productController.listProductByType);
-productRouter.post(
+productRoutes.get("/products", productController.listAllProducts);
+productRoutes.get("/products/:type", productController.listProductByType);
+productRoutes.post(
   "/product/add",
   validations.validateAdmin,
   productController.addProduct
 );
-productRouter.post(
+productRoutes.post(
   "/product/buy",
   validations.validateToken,
+  productValidations.verifyStock,
   productController.buyProduct
 );
-productRouter.put(
+productRoutes.put(
   "/product/edit",
   validations.validateAdmin,
   productController.editProduct
 );
-productRouter.delete(
+productRoutes.delete(
   "/product/remove",
   validations.validateAdmin,
   productController.removeProduct
 );
 
-export default productRouter;
+export default productRoutes;

@@ -15,11 +15,16 @@ export default class ProductValidations {
   //public async existingProduct(req: Request, res: Response, next: NextFunction) {}
 
   public async verifyStock(req: Request, res: Response, next: NextFunction) {
-    const { products } = req.body;
-    const getStock = async (productId: string, quantity: number) => {
-      const amount = await ProductModel.findById(productId).select("amount");
+    const {
+      order: { products },
+    } = req.body;
 
-      return { productId, quantity, avaliable: !!amount };
+    const getStock = async (productId: string, quantity: number) => {
+      const product = await ProductModel.findById(productId).select("amount");
+
+      if (!product) return { productId, quantity, avaliable: false };
+
+      return { productId, quantity, avaliable: product.amount >= quantity };
     };
 
     const stock = await Promise.all(
@@ -31,9 +36,11 @@ export default class ProductValidations {
     const outOfStock = stock.filter((product) => !product.avaliable);
 
     if (outOfStock.length) {
-      return res.status(400).json({ message: "Products out of stock: ", outOfStock });
+      return res
+        .status(400)
+        .json({ message: "One or more products are out of stock", outOfStock });
     }
-    
+
     return next();
   }
 }

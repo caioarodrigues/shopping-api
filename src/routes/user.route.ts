@@ -2,37 +2,37 @@ import { UserController } from "../controllers/user.controller";
 import Validations from "../middlewares/validations.middleware";
 import { Router } from "express";
 
-const userRouter = Router();
+const userRoutes = Router();
 const userController = UserController.getInstance();
 const validations = Validations.getInstance();
 
-userRouter.get(
+userRoutes.get(
   "/user",
   validations.validateToken,
   validations.validateAdmin,
   userController.listAllUsers
 );
-userRouter.post(
+userRoutes.post(
   "/user/create",
   validations.existingUser,
   userController.createUser
 );
-userRouter.post(
+userRoutes.post(
   "/user/login",
   validations.validateUser,
   validations.generateToken
 );
-userRouter.put(
+userRoutes.put(
   "/user/:userId",
   validations.validateToken,
   validations.verifySameUser,
   validations.verifyEmptyData,
   userController.updateUser
 );
-userRouter.delete(
+userRoutes.delete(
   "/user/:userId",
   validations.validateToken,
   userController.removeUser
 );
 
-export default userRouter;
+export default userRoutes;

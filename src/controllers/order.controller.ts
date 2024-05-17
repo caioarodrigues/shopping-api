@@ -16,6 +16,8 @@ export default class OrderController {
     try {
       const { userId, products } = req.body.order;
       //console.log(req.body.order);
+
+      if (products.quantity) {}
       const order = await OrderModel.create({ userId, products });
       return res.status(201).send(order);
     } catch (error) {
@@ -55,10 +57,11 @@ export default class OrderController {
         });
       }
 
+      console.log(req.body.status)
       const order = await OrderModel.findOneAndUpdate(
-        { _id: req.params.orderId, userId: req.params.userId },
+        { _id: req.params.orderId },
         { status: req.body.status },
-        { new: false }
+        { new: true }
       );
       return res.status(200).json(order);
     } catch (error) {

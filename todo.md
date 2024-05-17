@@ -1,4 +1,4 @@
-[] order status (created, accepted/declined, awaiting to be delivered, delivery done etc)
+[x] order status (created, accepted/declined, awaiting to be delivered, delivery done etc)
 
 [] payment type (real money, credit card etc)
   [] if real money: 
