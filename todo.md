@@ -8,6 +8,8 @@
 
 [] order history by each user
 
+[] fix order update bug
+
 [x] user CRUD
   [x] add 
   [x] delete
