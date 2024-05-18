@@ -6,9 +6,9 @@
     [] no charge
   * not sure if I will implement a payments API
 
-[] order history by each user
+[x] order history by each user
 
-[] fix order update bug
+[x] fix order update bug
 
 [x] user CRUD
   [x] add 

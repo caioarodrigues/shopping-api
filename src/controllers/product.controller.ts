@@ -60,7 +60,6 @@ export default class ProductController {
     try {
       const idProducts = req.body.order.products;
 
-      console.log(idProducts)
       const products = await Promise.all(
         idProducts.map(
           async (

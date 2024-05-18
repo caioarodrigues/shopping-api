@@ -15,7 +15,10 @@ export default class Validations {
   }
 
   public async validateUser(req: Request, res: Response, next: NextFunction) {
-    const user = await UserModel.findOne({ email: req.body.email, password: req.body.password });
+    const user = await UserModel.findOne({
+      email: req.body.email,
+      password: req.body.password,
+    });
     if (!user) return res.status(404).send("User not found");
 
     req.body.user = user;
@@ -43,36 +46,40 @@ export default class Validations {
     jsonwebtoken.verify(token, defaultConfig.secret, (error, decoded) => {
       if (error) return res.status(401).send("Invalid token");
 
-      //console.log(token, decoded)
       req.body.token = decoded;
-      //req.cookies.user_token = decoded;
+
       return next();
     });
   }
-  public async verifyEmptyData (req: Request, res: Response, next: NextFunction) {
+  public async verifyEmptyData(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     const { token, iat, exp, ...params } = req.body;
     const keys = Object.keys(params).length;
-    
+
     if (!keys) {
       return res.status(400).json({ message: "No data provided" });
     }
 
     return next();
   }
-  public async verifySameUser (req: Request, res: Response, next: NextFunction) {
+  public async verifySameUser(req: Request, res: Response, next: NextFunction) {
     if (req.body.token.user._id !== req.params.userId) {
       return res.status(403).json({ message: "Unauthorized" });
     }
     return next();
   }
-  public async validateAdmin (req: Request, res: Response, next: NextFunction) {
+  public async validateAdmin(req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization;
     if (!token) return res.status(401).send("Token not provided");
 
     jsonwebtoken.verify(token, defaultConfig.secret, (error, decoded: any) => {
       if (error) return res.status(401).send("Invalid token");
 
-      if (decoded.user.role !== "admin") return res.status(403).send("User is not an admin");
+      if (decoded.user.role !== "admin")
+        return res.status(403).send("User is not an admin");
 
       req.body.token = decoded;
       //req.cookies.user_token = decoded;

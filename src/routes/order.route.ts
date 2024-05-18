@@ -15,18 +15,18 @@ orderRoutes.use(validations.validateToken);
 orderRoutes.post(
   "/order/create",
   productValidations.verifyStock,
-  productController.buyProduct,
+  productValidations.buyProduct,
   orderController.createOrder
-);
-orderRoutes.get(
-  "/order/:order-id",
-  validations.verifySameUser,
-  orderController.getOrder
 );
 orderRoutes.get(
   "/order/list",
   validations.validateAdmin,
   orderController.getOrders
+);
+orderRoutes.post(
+  "/order/verify-status/:userId",
+  validations.verifySameUser,
+  orderController.getOrder
 );
 orderRoutes.get(
   "/order/list/:userId",

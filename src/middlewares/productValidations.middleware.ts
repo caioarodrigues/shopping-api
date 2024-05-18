@@ -43,4 +43,41 @@ export default class ProductValidations {
 
     return next();
   }
+
+  public async buyProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const idProducts = req.body.order.products;
+
+      const products = await Promise.all(
+        idProducts.map(
+          async (
+            product: { productId: string; quantity: number },
+            index: number
+          ) => {
+            const thisProduct = await ProductModel.findById(product.productId);
+            if (!thisProduct) return res.status(404).send("Product not found");
+
+            if (idProducts[index].quantity > thisProduct.amount)
+              return res.status(400).send("Not enough stock");
+
+            thisProduct.amount -= idProducts[index].quantity;
+            await thisProduct.save();
+
+            return {
+              name: thisProduct.name,
+              productId: product.productId,
+              quantity: product.quantity,
+            };
+          }
+        )
+      );
+
+      req.body.products_bought = products;
+      console.log('1' + JSON.stringify(req.body.products_bought))
+
+      return next();
+    } catch (error) {
+      return res.status(500);
+    }
+  }
 }

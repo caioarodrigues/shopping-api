@@ -14,12 +14,11 @@ export default class OrderController {
 
   public async createOrder(req: Request, res: Response) {
     try {
-      const { userId, products } = req.body.order;
-      //console.log(req.body.order);
+      const { products } = req.body.order;
+      const userId = req.body.token.user._id;
+      const order = await OrderModel.create({ products, userId });
 
-      if (products.quantity) {}
-      const order = await OrderModel.create({ userId, products });
-      return res.status(201).send(order);
+      return res.status(200).json(order);
     } catch (error) {
       return res.status(500);
     }
@@ -36,7 +35,9 @@ export default class OrderController {
 
   public async getOrder(req: Request, res: Response) {
     try {
-      const order = await OrderModel.findById(req.params.orderId);
+      const { order_id } = req.body;
+      const order = await OrderModel.findById(order_id);
+
       return res.status(200).json(order);
     } catch (error) {
       return res.status(500);
@@ -57,7 +58,6 @@ export default class OrderController {
         });
       }
 
-      console.log(req.body.status)
       const order = await OrderModel.findOneAndUpdate(
         { _id: req.params.orderId },
         { status: req.body.status },
