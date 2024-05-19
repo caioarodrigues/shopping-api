@@ -17,3 +17,6 @@
 
 [x] admin stuff
   [x] list all users 
+
+[] payments model
+  - store and retrieve transactions information
