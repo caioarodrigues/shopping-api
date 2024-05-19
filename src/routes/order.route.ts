@@ -3,19 +3,25 @@ import ProductController from "../controllers/product.controller";
 import OrderController from "../controllers/order.controller";
 import Validations from "../middlewares/validations.middleware";
 import ProductValidations from "../middlewares/productValidations.middleware";
+import PaymentsMiddleware from "../middlewares/payments.middleware";
 
 const orderRoutes = Router();
 const orderController = OrderController.getInstance();
 const validations = Validations.getInstance();
 const productValidations = ProductValidations.getInstance();
 const productController = ProductController.getInstance();
+const paymentsMiddleware = PaymentsMiddleware.getInstance();
 
 orderRoutes.use(validations.validateToken);
 
 orderRoutes.post(
   "/order/create",
   productValidations.verifyStock,
+  paymentsMiddleware.validatePayment,
   productValidations.buyProduct,
+  paymentsMiddleware.calculateTotal,
+  paymentsMiddleware.calculateChange,
+  paymentsMiddleware.getResume,
   orderController.createOrder
 );
 orderRoutes.get(

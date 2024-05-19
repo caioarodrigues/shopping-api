@@ -16,9 +16,23 @@ export default class OrderController {
     try {
       const { products } = req.body.order;
       const userId = req.body.token.user._id;
-      const order = await OrderModel.create({ products, userId });
+      const paymentMethod = req.body.order.payment.method;
+      const order = await OrderModel.create({
+        products,
+        userId,
+        payment: {
+          method: paymentMethod,
+          total: req.body.cart.total,
+          cash: {
+            amount: req.body.order.payment.cash.amount,
+            change: req.body.resume.change,
+          },
+        },
+      });
 
-      return res.status(200).json(order);
+      const resume = req.body.resume || false;
+
+      return res.json({ order, resume });
     } catch (error) {
       return res.status(500);
     }

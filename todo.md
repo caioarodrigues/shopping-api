@@ -1,9 +1,9 @@
 [x] order status (created, accepted/declined, awaiting to be delivered, delivery done etc)
 
 [] payment type (real money, credit card etc)
-  [] if real money: 
-    [] is charge needed? 
-    [] no charge
+  [x] if real money: 
+    [x] is charge needed? 
+    [x] no charge
   * not sure if I will implement a payments API
 
 [x] order history by each user

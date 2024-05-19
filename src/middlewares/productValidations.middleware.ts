@@ -72,9 +72,6 @@ export default class ProductValidations {
         )
       );
 
-      req.body.products_bought = products;
-      console.log('1' + JSON.stringify(req.body.products_bought))
-
       return next();
     } catch (error) {
       return res.status(500);

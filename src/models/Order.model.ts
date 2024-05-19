@@ -31,6 +31,32 @@ const OrderSchema = new mongoose.Schema({
       },
     },
   ],
+  payment: {
+    total: {
+      type: Number,
+      required: true,
+    },
+    method: {
+      type: String,
+      enum: ["card", "cash", "pix"],
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["paid", "unpaid"],
+      default: "unpaid",
+    },
+    cash: {
+      amount: {
+        type: Number,
+        default: 0,
+      },
+      change: {
+        type: Number,
+        default: 0,
+      },
+    },
+  },
   orderDate: {
     type: Date,
     default: Date.now,
